@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/sirupsen/logrus"
 	"github.com/zartbot/holtwinters"
 )
@@ -22,6 +24,11 @@ func main() {
 	if e == nil {
 		logrus.Warn(p)
 	}
+	model := holtwinters.New(data, 24, 50, p.Alpha, p.Beta, p.Gamma, 3)
+	model.TripleExponentialSmoothing()
+	for k, v := range model.Result {
+		fmt.Println(k, "--", v)
+	}
 
 	mse, err := holtwinters.TimeSplitMSE(data, 0.11652680227350454, 0.002677697431105852, 0.05820973606789237, 24, 3)
 	if err != nil {
@@ -34,9 +41,6 @@ func main() {
 		logrus.Fatal(err)
 	}
 	logrus.Warn("New:", mse)
-
-	model := holtwinters.New(data, 24, 50, 0.11652680227350454, 0.002677697431105852, 0.05820973606789237, 3)
-	model.TripleExponentialSmoothing()
 
 	/*
 		for k, v := range model.Result {
