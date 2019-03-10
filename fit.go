@@ -87,6 +87,13 @@ func Fit(data []float64, seasonLength int, kfold int) (*HoltWinterParameter, err
 		Beta:  0,
 		Gamma: 0,
 	}
+
+	numSample := len(data)
+	testSize := numSample / (kfold + 1)
+	if testSize < 2*seasonLength {
+		return parameter, errors.New("Split test size is less than seasonLength")
+	}
+
 	problem := optimize.Problem{
 		Func: func(x []float64) float64 {
 			tsMSE := 0.0

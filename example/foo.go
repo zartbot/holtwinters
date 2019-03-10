@@ -23,6 +23,8 @@ func main() {
 	p, e := holtwinters.Fit(data, 24, 3)
 	if e == nil {
 		logrus.Warn(p)
+	} else {
+		logrus.Fatal(e)
 	}
 	model := holtwinters.New(data, 24, 50, p.Alpha, p.Beta, p.Gamma, 3)
 	model.TripleExponentialSmoothing()
